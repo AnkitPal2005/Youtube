@@ -1,0 +1,36 @@
+# YouTube Shorts Bot — Configuration
+
+niche: "top facts"
+
+# LLM settings
+llm:
+  preferred: "groq"            # "gemini" | "groq"
+  gemini_model: "gemini-2.0-flash"
+  groq_model: "llama-3.3-70b-versatile"
+
+# Voiceover settings (Phase 2)
+voice:
+  name: "hi-IN-SwaraNeural"    # edge-tts voice ID (Hindi female)
+  rate: "+10%"                 # speaking rate adjustment
+  volume: "+0%"
+
+# Video style (Phase 5)
+video:
+  width: 1080
+  height: 1920
+  fps: 30
+  music_volume_db: -20         # how far below voice level background music sits
+
+# Posting schedule (Phase 6)
+posting:
+  default_time: "18:30"        # 24h local time for scheduled uploads
+  timezone: "Asia/Kolkata"
+
+# Caption style (Phase 4)
+captions:
+  words_per_line: 3
+  font_size: 72
+  font_color: "white"
+  outline_color: "black"
+  outline_width: 3
+  position: "bottom"           # lower-third placement

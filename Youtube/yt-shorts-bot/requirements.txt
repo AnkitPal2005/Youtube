@@ -1,0 +1,27 @@
+# Core
+python-dotenv>=1.0.0
+typer>=0.12.0
+pyyaml>=6.0.1
+
+# Phase 1 — Script generation
+google-generativeai>=0.7.0
+groq>=0.9.0
+
+# Phase 2 — Voiceover
+edge-tts>=6.1.9
+
+# Phase 3 — Visuals
+requests>=2.31.0
+pillow>=10.0.0
+
+# Phase 4 — Captions
+openai-whisper>=20231117
+
+# Phase 5 — Assembly
+moviepy>=1.0.3
+ffmpeg-python>=0.2.0
+
+# Phase 6 — YouTube upload
+google-api-python-client>=2.100.0
+google-auth-oauthlib>=1.1.0
+google-auth-httplib2>=0.1.1

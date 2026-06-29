@@ -1,0 +1,33 @@
+# Secrets — NEVER push these
+.env
+client_secret.json
+data/token.json
+
+# Generated output — too large for git
+output/scripts/*
+output/audio/*
+output/clips/*
+output/final/*
+assets/music/*
+
+# Keep folder structure
+!output/scripts/.gitkeep
+!output/audio/.gitkeep
+!output/clips/.gitkeep
+!output/final/.gitkeep
+!assets/music/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Whisper model cache
+~/.cache/whisper/
+
+# Windows
+Thumbs.db
+desktop.ini
