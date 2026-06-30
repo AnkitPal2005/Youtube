@@ -10,8 +10,8 @@ llm:
 
 # Voiceover settings (Phase 2)
 voice:
-  name: "hi-IN-SwaraNeural"    # edge-tts voice ID (Hindi female)
-  rate: "+10%"                 # speaking rate adjustment
+  name: "hi-IN-MadhurNeural"    # edge-tts voice ID (Hindi male)
+  rate: "+18%"                 # speaking rate adjustment
   volume: "+0%"
 
 # Video style (Phase 5)

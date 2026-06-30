@@ -83,44 +83,88 @@ Respond with ONLY this JSON (no markdown, no explanation):
 """
 
 FACTS_PROMPT = """\
-Write a viral Hindi YouTube Shorts script with exactly 7 MIND-BLOWING, lesser-known facts about: "{topic}"
+You are one of the world's best YouTube Shorts scriptwriters with expertise in viral educational content.
+Generate a 50–60 second script for a YouTube Shorts video about: "{topic}"
 
-CRITICAL word count rule: The "script" field MUST be between 110 and 128 words EXACTLY.
-Hindi TTS speaks at ~2.3 words/second — 120 words = ~52 seconds. DO NOT exceed 128 words.
-Count every single word before responding. This is the most important rule.
+The generated script must be optimized for maximum audience retention, curiosity, and engagement.
 
-FACT QUALITY RULES (most important):
-- ONLY use facts that most people have NEVER heard before — no common knowledge.
-- Each fact must make the viewer stop and think "ye kaise ho sakta hai?"
-- Facts should be scientifically verified but deeply counterintuitive or shocking.
-- Prefer facts that challenge what people think they know.
-- NO generic facts like "sun is a star" or "water is H2O" — those are too basic.
-- Include specific numbers, measurements, or comparisons to make facts tangible.
-- Examples of the kind of facts we want:
-  * "Ek din mein aapke sharir mein itni cells marti hain ki unka weight ek pencil ke barabar hai"
-  * "Space mein rona mushkil hai kyunki aansu aankhon mein hi ball banakar chipke rehte hain"
+Requirements:
+Language:
+- Natural Roman Hindi (Hinglish)
+- Very easy words
+- Conversational tone
+- No difficult vocabulary
+- Sounds like a real human, not AI
 
-Format rules:
-- hook: Ek aisa sentence jo sunne wale ka dimaag hila de — max 15 words. Start with "Kya aap jaante hain..." or "Ye sunke aap..."
-- script:
-  * Hook se shuru karo.
-  * Exactly 7 facts: "Fact 1: ...", "Fact 2: ...", ..., "Fact 7: ..."
-  * Har fact: 1-2 punchy sentences, specific numbers/details included.
-  * End: "Aisi aur amazing facts ke liye follow karo!"
-  * MUST BE exactly 110-128 words total — count before submitting.
-- title: Hindi mein catchy title with topic + "ke Ansune Facts" pattern, max 60 chars, ends with #Shorts
-- description: 2-3 sentences Hindi mein + #Shorts #Facts #[topic] hashtags
-- tags: 5 tags — topic name, "AnsuneFactsHindi", "MindBlowingFacts", "FactsInHindi", "Shorts"
-- visual_keywords: 7 short English search terms — one matching each fact's subject for stock footage.
+Content Rules:
+- Every fact must be 100% verified.
+- Never invent facts.
+- Never repeat common facts.
+- Every fact should surprise the viewer.
+- Use only interesting and little-known facts.
+- No fake statistics.
+- No clickbait that cannot be justified.
 
-Respond with ONLY this JSON (no markdown, no explanation):
+Retention Rules:
+- The first 2 seconds must create instant curiosity.
+- Never introduce yourself.
+- Never say "Hello Friends".
+- Start immediately with suspense.
+
+Example style:
+"Tum yakeen nahi karoge..."
+"Sirf 1% log ye jaante hain..."
+"Ye fact akhir tak dekhna..."
+
+The script must feel like a story instead of reading facts.
+Each fact should naturally connect to the next.
+Use transition phrases like:
+- "Lekin asli surprise abhi baaki hai..."
+- "Par ye to kuch bhi nahi..."
+- "Aur ab aata hai sabse dangerous fact..."
+- "Ab jo sunoge uspar yakeen karna mushkil hai..."
+
+The last fact must be the strongest.
+
+Fact Order:
+Fact 7 → Good
+Fact 6 → Better
+Fact 5 → More shocking
+Fact 4 → Even stronger
+Fact 3 → Incredible
+Fact 2 → Mind blowing
+Fact 1 → Impossible to forget
+
+Writing Style:
+- Short sentences.
+- High energy.
+- Curiosity in every line.
+- No unnecessary explanations.
+- Maximum 2 sentences per fact.
+- Every sentence should make viewers want the next one.
+
+End with:
+Ask a question that encourages comments.
+Example:
+"Inme se kaunsa fact tumhe sabse zyada shocking laga?"
+
+Also include:
+- Viral Title
+- Thumbnail Text
+- SEO Description
+- 20 SEO Keywords
+- 20 Trending Hashtags
+- Reliable Sources for every fact.
+
+Output Format (ONLY valid JSON, no markdown formatting fences, no explanations):
 {{
-  "hook": "<dimag hilane wala hook Hindi mein, max 15 words>",
-  "script": "<poori 7-fact script Hindi mein, 110-128 words MAXIMUM, numbered facts>",
-  "title": "<Hindi title max 60 chars ending with #Shorts>",
-  "description": "<Hindi description with hashtags>",
-  "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "visual_keywords": ["fact1 keyword", "fact2 keyword", "fact3 keyword", "fact4 keyword", "fact5 keyword", "fact6 keyword", "fact7 keyword"]
+  "title": "<Viral Title>",
+  "thumbnail": "<Thumbnail Text>",
+  "description": "<SEO Description>",
+  "script": "<The generated 50-60 second voice-over script, conversational Roman Hindi, 7 facts ordered from 7 to 1, with story-like transitions and ending question>",
+  "keywords": ["keyword1", "keyword2", ..., "keyword20"],
+  "hashtags": ["hashtag1", "hashtag2", ..., "hashtag20"],
+  "sources": ["source for fact 7", "source for fact 6", ..., "source for fact 1"]
 }}
 """
 
@@ -186,17 +230,27 @@ def _extract_json(raw: str) -> dict:
         ) from exc
 
 
-def _validate_script(data: dict) -> None:
+def _validate_script(data: dict, style: str = "tips") -> None:
     required = {"hook", "script", "title", "description", "tags", "visual_keywords"}
     missing = required - data.keys()
     if missing:
         raise ValueError(f"Script JSON is missing required fields: {missing}")
 
     word_count = len(data["script"].split())
-    if not (80 <= word_count <= 130):
+    if style == "story":
+        ok = (140 <= word_count <= 180)
+        target = "140-180"
+    elif style == "facts":
+        ok = (100 <= word_count <= 180)
+        target = "100-180"
+    else:
+        ok = (80 <= word_count <= 130)
+        target = "80-130"
+
+    if not ok:
         print(
             f"  Warning: script word count is {word_count} "
-            f"(target 80-130). Check before continuing.",
+            f"(target {target}). Check before continuing.",
             file=sys.stderr,
         )
 
@@ -261,13 +315,23 @@ def generate_script(topic: str, style: str = "tips") -> Path:
     if style == "story":
         template, min_words = STORY_PROMPT, 140
     elif style == "facts":
-        template, min_words = FACTS_PROMPT, 110
+        template, min_words = FACTS_PROMPT, 100
     else:
         template, min_words = SCRIPT_PROMPT, 80
 
     prompt = template.format(topic=effective_topic)
     raw = _call_llm(prompt, config, provider_used)
     data = _extract_json(raw)
+
+    if style == "facts":
+        if "tags" not in data:
+            data["tags"] = data.get("keywords", []) + data.get("hashtags", [])
+        if "visual_keywords" not in data:
+            data["visual_keywords"] = data.get("keywords", [])[:8]
+        if "hook" not in data:
+            script_text = data.get("script", "")
+            sentences = re.split(r'[.!?।]\s*', script_text)
+            data["hook"] = sentences[0] if sentences else ""
 
     word_count = len(data.get("script", "").split())
     if word_count < min_words:
@@ -285,7 +349,17 @@ def generate_script(topic: str, style: str = "tips") -> Path:
             raw = _call_gemini(expand_msg + "\n\nPrevious JSON:\n" + raw, config)
         data = _extract_json(raw)
 
-    _validate_script(data)
+        if style == "facts":
+            if "tags" not in data:
+                data["tags"] = data.get("keywords", []) + data.get("hashtags", [])
+            if "visual_keywords" not in data:
+                data["visual_keywords"] = data.get("keywords", [])[:8]
+            if "hook" not in data:
+                script_text = data.get("script", "")
+                sentences = re.split(r'[.!?।]\s*', script_text)
+                data["hook"] = sentences[0] if sentences else ""
+
+    _validate_script(data, style)
 
     data["_meta"] = {
         "topic": effective_topic,
