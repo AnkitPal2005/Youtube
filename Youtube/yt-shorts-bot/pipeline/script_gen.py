@@ -29,56 +29,85 @@ You always respond with ONLY valid JSON — no markdown fences, no commentary.
 """
 
 SCRIPT_PROMPT = """\
-Write a viral YouTube Shorts script about: "{topic}"
+You are one of the world's best YouTube Shorts scriptwriters with expertise in viral educational content, tips, and life hacks.
+Generate a 40–50 second script for a YouTube Shorts video about: "{topic}"
 
-CRITICAL word count rule: The "script" field MUST be between 80 and 130 words.
-Count every word carefully before responding. A 45-second Short needs ~100 words spoken aloud.
+The generated script must be optimized for maximum audience retention, curiosity, and engagement.
 
-Other rules:
-- The hook MUST grab attention in the first 3 seconds (one punchy sentence, max 15 words).
-- The script should cover 3-5 distinct tips/points to fill the time — not just 1-2 sentences.
-- Write conversational, direct language — no filler phrases like "In today's video..."
-- End with a clear call-to-action (e.g. "Follow for more", "Try this today").
-- Flag any factual claims that need human verification with [VERIFY].
-- visual_keywords: 4-6 short search terms (2-3 words each) describing matching footage.
+Requirements:
+Language:
+- Natural Roman Hindi (Hinglish)
+- Very easy words
+- Conversational tone
+- No difficult vocabulary
+- Sounds like a real human, not AI
 
-Respond with ONLY this JSON (no markdown, no explanation):
+Content & Structure Rules:
+- The first 2 seconds must create instant curiosity with a psychological hook (e.g. "Tum bahut badi galti kar rahe ho..." or "Ye ek secret tumhari life badal dega..."). Never say "Hello friends" or introduce yourself.
+- The script should cover 3-5 distinct tips/points to fill the time.
+- Avoid any AI-sounding phrases or robotic filler.
+- Create a curiosity loop every 5–7 seconds (using transition phrases like "Lekin yahan ek twist hai...", "Par sabse important step iske baad aata hai...").
+- Keep sentences short, punchy, and high-energy.
+- End with a question that encourages comments (e.g. "Kya tumne kabhi ye try kiya hai? Mujhe comments me batao").
+
+Also include:
+- Viral Title
+- Thumbnail Text
+- SEO Description
+- 20 SEO Keywords
+- 20 Trending Hashtags
+- Reliable Sources or justification for the tips.
+
+Output Format (ONLY valid JSON, no markdown formatting fences, no explanations):
 {{
-  "hook": "<one punchy opening sentence, max 15 words>",
-  "script": "<full voiceover text including hook, MUST BE 80-130 words — count carefully>",
-  "title": "<YouTube Shorts title, max 60 chars, ends with #Shorts>",
-  "description": "<2-3 sentence description with #Shorts and relevant hashtags>",
-  "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "visual_keywords": ["keyword1", "keyword2", "keyword3", "keyword4"]
+  "title": "<Viral Title>",
+  "thumbnail": "<Thumbnail Text>",
+  "description": "<SEO Description>",
+  "script": "<The generated 40-50 second voice-over script in conversational Roman Hindi, with curiosity loops every 5-7 seconds and ending question>",
+  "keywords": ["keyword1", "keyword2", ..., "keyword20"],
+  "hashtags": ["hashtag1", "hashtag2", ..., "hashtag20"],
+  "sources": ["source or reference justification for the tips"]
 }}
 """
 
 STORY_PROMPT = """\
-Write a 60-second Hindi short story (kahani) for YouTube Shorts about: "{topic}"
+You are one of the world's best YouTube Shorts scriptwriters with expertise in viral cinematic storytelling.
+Generate a 50–60 second story script for a YouTube Shorts video about: "{topic}"
 
-CRITICAL word count rule: The "script" field MUST be between 140 and 170 words.
-Hindi speech pace is ~2.3 words/second, so 150 words = ~65 seconds.
-Count every word carefully before responding.
+The generated script must be optimized for maximum audience retention, curiosity, and engagement.
 
-Story structure rules:
-- hook: Ek aisa pehla sentence jo sunne wale ko rok de — emotional ya suspenseful (max 15 words).
-- script: Poori kahani — shuruat (setup), beech (conflict/tension), aur ant (resolution/lesson).
-  - Pure Hindi mein likho (Devanagari nahi, Roman Hindi theek hai).
-  - Seedhi, simple bhasha use karo — jaise koi dost baat kar raha ho.
-  - Ek clear life lesson ya twist ending hona chahiye.
-  - MUST BE 140-170 words — count carefully.
-- title: Hindi mein YouTube title, max 60 chars, ends with #Shorts
-- description: 2-3 sentences Hindi mein, #Shorts aur relevant hashtags ke saath.
-- visual_keywords: 4-6 English search terms for matching stock footage (scenes from the story).
+Requirements:
+Language:
+- Natural Roman Hindi (Hinglish)
+- Very easy words
+- Conversational, storytelling tone
+- No difficult vocabulary
+- Sounds like a real human, not AI
 
-Respond with ONLY this JSON (no markdown, no explanation):
+Story Structure Rules:
+- Setup / Emotional Hook (first 2 seconds): Start in the middle of action or suspense (e.g., "Uski ek aadat ne use barbad kar diya..."). Never say "Hello friends" or introduce yourself.
+- Pacing: Build emotional tension, followed by conflict/tension (beech), and a sudden/lesson-oriented resolution or twist ending (ant).
+- Curiosity loops: Re-engage the viewer every 5-7 seconds with narrative transitions (e.g., "Lekin tabhi kuch aisa hua jisne sab badal diya...", "Par asal kahani to ab shuru hoti hai...").
+- Keep sentences short and conversational, like a friend narrating a movie.
+- End with a question that encourages comments (e.g., "Agar tum uski jagah hote, toh kya karte? Comments me batao").
+
+Also include:
+- Viral Title
+- Thumbnail Text
+- SEO Description
+- 20 SEO Keywords
+- 20 Trending Hashtags
+- The core lesson or theme source of the story.
+
+Output Format (ONLY valid JSON, no markdown formatting fences, no explanations):
 {{
-  "hook": "<pehla punchy sentence Hindi mein, max 15 words>",
-  "script": "<poori kahani Hindi mein, MUST BE 140-170 words>",
-  "title": "<Hindi YouTube title, max 60 chars, ends with #Shorts>",
-  "description": "<2-3 sentence Hindi description with #Shorts and hashtags>",
-  "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "visual_keywords": ["english keyword1", "english keyword2", "english keyword3", "english keyword4"]
+  "title": "<Viral Title>",
+  "thumbnail": "<Thumbnail Text>",
+  "description": "<SEO Description>",
+  "script": "<The generated 50-60 second narrative story in conversational Roman Hindi, with high emotional pacing, curiosity loops every 5-7 seconds, and ending question>",
+  "keywords": ["keyword1", "keyword2", ..., "keyword20"],
+  "hashtags": ["hashtag1", "hashtag2", ..., "hashtag20"],
+  "sources": ["core theme or lesson source"]
 }}
 """
 
@@ -323,15 +352,14 @@ def generate_script(topic: str, style: str = "tips") -> Path:
     raw = _call_llm(prompt, config, provider_used)
     data = _extract_json(raw)
 
-    if style == "facts":
-        if "tags" not in data:
-            data["tags"] = data.get("keywords", []) + data.get("hashtags", [])
-        if "visual_keywords" not in data:
-            data["visual_keywords"] = data.get("keywords", [])[:8]
-        if "hook" not in data:
-            script_text = data.get("script", "")
-            sentences = re.split(r'[.!?।]\s*', script_text)
-            data["hook"] = sentences[0] if sentences else ""
+    if "tags" not in data:
+        data["tags"] = data.get("keywords", []) + data.get("hashtags", [])
+    if "visual_keywords" not in data:
+        data["visual_keywords"] = data.get("keywords", [])[:8]
+    if "hook" not in data:
+        script_text = data.get("script", "")
+        sentences = re.split(r'[.!?।]\s*', script_text)
+        data["hook"] = sentences[0] if sentences else ""
 
     word_count = len(data.get("script", "").split())
     if word_count < min_words:
@@ -349,15 +377,14 @@ def generate_script(topic: str, style: str = "tips") -> Path:
             raw = _call_gemini(expand_msg + "\n\nPrevious JSON:\n" + raw, config)
         data = _extract_json(raw)
 
-        if style == "facts":
-            if "tags" not in data:
-                data["tags"] = data.get("keywords", []) + data.get("hashtags", [])
-            if "visual_keywords" not in data:
-                data["visual_keywords"] = data.get("keywords", [])[:8]
-            if "hook" not in data:
-                script_text = data.get("script", "")
-                sentences = re.split(r'[.!?।]\s*', script_text)
-                data["hook"] = sentences[0] if sentences else ""
+        if "tags" not in data:
+            data["tags"] = data.get("keywords", []) + data.get("hashtags", [])
+        if "visual_keywords" not in data:
+            data["visual_keywords"] = data.get("keywords", [])[:8]
+        if "hook" not in data:
+            script_text = data.get("script", "")
+            sentences = re.split(r'[.!?।]\s*', script_text)
+            data["hook"] = sentences[0] if sentences else ""
 
     _validate_script(data, style)
 
